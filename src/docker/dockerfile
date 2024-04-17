@@ -1,0 +1,7 @@
+FROM golang:1.22.2-alpine3.19
+
+WORKDIR /usr/app
+
+EXPOSE 8080:8080
+
+ENTRYPOINT [ "go", "run", "./src/cmd/main" ]

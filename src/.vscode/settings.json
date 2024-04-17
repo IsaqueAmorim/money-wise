@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "Money Wise",
+            "database": "money_wise",
+            "username": "isaque",
+            "password": "1234"
+        }
+    ]
+}

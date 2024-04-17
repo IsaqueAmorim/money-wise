@@ -1,9 +1,10 @@
 package revenue
 
 import (
-	"github.com/IsaqueAmorim/money-wise/domain/shared/category"
-	"github.com/google/uuid"
 	"time"
+
+	"github.com/IsaqueAmorim/money-wise/src/domain/shared/category"
+	"github.com/google/uuid"
 )
 
 type Revenue struct {
