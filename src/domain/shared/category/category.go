@@ -2,15 +2,17 @@ package category
 
 import "github.com/google/uuid"
 
+type TransactionTypeEnum uint8
+
 const (
-	EXPENSE = "EXPENSE"
-	REVENUE = "REVENUE"
+	EXPENSE TransactionTypeEnum = iota
+	REVENUE
 )
 
 type Category struct {
 	ID   uuid.UUID
 	Name string
-	Type string
+	Type TransactionTypeEnum
 }
 
 func NewExpenseCategory(name string) *Category {

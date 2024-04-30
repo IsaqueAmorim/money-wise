@@ -9,16 +9,15 @@ import (
 )
 
 type expense struct {
-	ID               uuid.UUID
-	Title            string
-	Description      string
-	Categories       []category.Category
-	Ammount          float64
-	CreatedAt        time.Time
-	Date             time.Time
-	SendNotification bool
-	Installments     []installment
-	Paid             bool
+	ID           uuid.UUID
+	Title        string
+	Description  string
+	Categories   []category.Category
+	Ammount      float64
+	Installments []installment
+	Paid         bool
+	CreatedAt    time.Time
+	Date         time.Time
 }
 
 type installment struct {
@@ -30,7 +29,7 @@ type installment struct {
 	Value          float64
 }
 
-func (e *expense) NewInstallments(numberOfInstallments int, dueDate time.Time) {
+func (e *expense) NewInstallment(numberOfInstallments int, dueDate time.Time) {
 
 	for i := 0; i <= numberOfInstallments; i++ {
 		e.Installments[i] = installment{
@@ -46,16 +45,15 @@ func (e *expense) NewInstallments(numberOfInstallments int, dueDate time.Time) {
 func NewExpense(title, description string, categories []category.Category, ammount float64, dueDate time.Time, sendNotification, paid bool, installments int) *expense {
 
 	expense := &expense{
-		ID:               uuid.New(),
-		Title:            title,
-		Description:      description,
-		Categories:       categories,
-		Ammount:          ammount,
-		CreatedAt:        time.Now(),
-		SendNotification: sendNotification,
-		Paid:             paid,
+		ID:          uuid.New(),
+		Title:       title,
+		Description: description,
+		Categories:  categories,
+		Ammount:     ammount,
+		CreatedAt:   time.Now(),
+		Paid:        paid,
 	}
-	expense.NewInstallments(installments, dueDate)
+	expense.NewInstallment(installments, dueDate)
 
 	return expense
 }
@@ -94,4 +92,20 @@ func (e expense) pay() error {
 	e.pay()
 
 	return nil
+}
+
+func (e *expense) ChangeTitle(title string) {
+	e.Title = title
+}
+
+func (e *expense) ChangeDescription(description string) {
+	e.Description = description
+}
+
+func (e *expense) ChangeAmmount(ammount float64) {
+	e.Ammount = ammount
+}
+
+func (e *expense) ChangeCategories(categories []category.Category) {
+	e.Categories = categories
 }
