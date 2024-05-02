@@ -31,7 +31,7 @@ type installment struct {
 
 func (e *expense) NewInstallment(numberOfInstallments int, dueDate time.Time) {
 
-	for i := 0; i <= numberOfInstallments; i++ {
+	for i := 0; i < numberOfInstallments; i++ {
 		e.Installments[i] = installment{
 			ID:             uuid.New(),
 			ExpenseID:      e.ID,
@@ -42,16 +42,18 @@ func (e *expense) NewInstallment(numberOfInstallments int, dueDate time.Time) {
 	}
 }
 
-func NewExpense(title, description string, categories []category.Category, ammount float64, dueDate time.Time, sendNotification, paid bool, installments int) *expense {
+func NewExpense(title, description string, categories []category.Category, ammount float64, dueDate time.Time, paid bool, installments int) *expense {
 
 	expense := &expense{
-		ID:          uuid.New(),
-		Title:       title,
-		Description: description,
-		Categories:  categories,
-		Ammount:     ammount,
-		CreatedAt:   time.Now(),
-		Paid:        paid,
+		ID:           uuid.New(),
+		Title:        title,
+		Description:  description,
+		Categories:   categories,
+		Ammount:      ammount,
+		CreatedAt:    time.Now(),
+		Installments: make([]installment, installments),
+		Paid:         paid,
+		Date:         dueDate,
 	}
 	expense.NewInstallment(installments, dueDate)
 
@@ -61,7 +63,7 @@ func NewExpense(title, description string, categories []category.Category, ammou
 func (e *expense) PayExpense() error {
 
 	for i := range e.Installments {
-		if e.Installments[i].PaidDate != *new(time.Time) {
+		if e.Installments[i].PaidDate == *new(time.Time) {
 			e.Installments[i].PaidDate = time.Now()
 		}
 	}
@@ -73,7 +75,11 @@ func (e *expense) PayInstallment(installmentNum int) error {
 
 	LAST_ITEM := len(e.Installments) - 1
 
-	if len(e.Installments) < installmentNum {
+	if len(e.Installments) > installmentNum {
+
+		if e.Installments[installmentNum].PaidDate != *new(time.Time) {
+			return errors.New("Installment already paid")
+		}
 
 		e.Installments[installmentNum].PaidDate = time.Now()
 		if installmentNum == LAST_ITEM {
@@ -84,13 +90,12 @@ func (e *expense) PayInstallment(installmentNum int) error {
 	return nil
 }
 
-func (e expense) pay() error {
+func (e *expense) pay() error {
 
 	if e.Paid {
-		return errors.New("The invoice has already been paid")
+		return errors.New("Expense already paid")
 	}
-	e.pay()
-
+	e.Paid = true
 	return nil
 }
 
