@@ -78,7 +78,7 @@ func (e *expense) PayInstallment(installmentNum int) error {
 	if len(e.Installments) > installmentNum {
 
 		if e.Installments[installmentNum].PaidDate != *new(time.Time) {
-			return errors.New("Installment already paid")
+			return errors.New("installment already paid")
 		}
 
 		e.Installments[installmentNum].PaidDate = time.Now()
@@ -93,22 +93,37 @@ func (e *expense) PayInstallment(installmentNum int) error {
 func (e *expense) pay() error {
 
 	if e.Paid {
-		return errors.New("Expense already paid")
+		return errors.New("expense already paid")
 	}
 	e.Paid = true
 	return nil
 }
 
-func (e *expense) ChangeTitle(title string) {
+func (e *expense) ChangeTitle(title string) error {
+	if len(title) < 3 || len(title) > 50 {
+		return errors.New("title must be between 3 and 50 characters")
+	}
 	e.Title = title
+	return nil
 }
 
-func (e *expense) ChangeDescription(description string) {
+func (e *expense) ChangeDescription(description string) error {
+
+	if len(description) < 3 || len(description) > 300 {
+		return errors.New("description must be between 3 and 300 characters")
+	}
+
 	e.Description = description
+	return nil
 }
 
-func (e *expense) ChangeAmmount(ammount float64) {
+func (e *expense) ChangeAmmount(ammount float64) error {
+
+	if ammount <= 0 {
+		return errors.New("ammount must be greater than 0")
+	}
 	e.Ammount = ammount
+	return nil
 }
 
 func (e *expense) ChangeCategories(categories []category.Category) {
