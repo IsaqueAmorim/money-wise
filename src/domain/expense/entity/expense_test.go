@@ -78,7 +78,7 @@ func TestGivenPaidInstallment_WhenPayInstallment_ThenReturnError(t *testing.T) {
 	err := expense.PayInstallment(2)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, err.Error(), "Installment already paid")
+	assert.Equal(t, err.Error(), "installment already paid")
 }
 
 func TestGivenPaidExpense_WhenPayExpense_ThenReturnError(t *testing.T) {
@@ -87,5 +87,5 @@ func TestGivenPaidExpense_WhenPayExpense_ThenReturnError(t *testing.T) {
 	err := data.PayExpense()
 
 	assert.NotNil(t, err)
-	assert.Equal(t, err.Error(), "Expense already paid")
+	assert.Equal(t, err.Error(), "expense already paid")
 }
